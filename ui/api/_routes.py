@@ -105,10 +105,19 @@ def _persist(payload: dict[str, Any], message: str, result: dict[str, Any]) -> s
     return conversation_id
 
 
+# A failed lookup must never be reported as "no conversations". Saying the list
+# is empty when it could not be read is how the UI ended up contradicting a
+# database that had the rows in it.
+_UNAVAILABLE = "History is temporarily unavailable. The database did not answer."
+
+
 def history_list_response(limit: int = 50) -> tuple[int, dict[str, Any]]:
     if not history.configured():
         return 200, {"enabled": False, "conversations": []}
-    return 200, {"enabled": True, "conversations": history.list_conversations(limit)}
+    try:
+        return 200, {"enabled": True, "conversations": history.list_conversations(limit)}
+    except history.HistoryUnavailable:
+        return 503, {"error": "history_unavailable", "message": _UNAVAILABLE}
 
 
 def history_get_response(conversation_id: Any) -> tuple[int, dict[str, Any]]:
@@ -116,7 +125,10 @@ def history_get_response(conversation_id: Any) -> tuple[int, dict[str, Any]]:
         return 404, {"error": "history_disabled", "message": "History is not configured."}
     if not _valid_id(conversation_id):
         return 400, {"error": "invalid_id", "message": "Expected a conversation UUID."}
-    loaded = history.load_conversation(conversation_id)
+    try:
+        loaded = history.load_conversation(conversation_id)
+    except history.HistoryUnavailable:
+        return 503, {"error": "history_unavailable", "message": _UNAVAILABLE}
     if loaded is None:
         return 404, {"error": "not_found", "message": "No such conversation."}
     return 200, loaded
@@ -127,8 +139,10 @@ def history_delete_response(conversation_id: Any) -> tuple[int, dict[str, Any]]:
         return 404, {"error": "history_disabled", "message": "History is not configured."}
     if not _valid_id(conversation_id):
         return 400, {"error": "invalid_id", "message": "Expected a conversation UUID."}
-    if not history.delete_conversation(conversation_id):
-        return 502, {"error": "delete_failed", "message": "The conversation could not be deleted."}
+    try:
+        history.delete_conversation(conversation_id)
+    except history.HistoryUnavailable:
+        return 503, {"error": "history_unavailable", "message": _UNAVAILABLE}
     return 200, {"deleted": conversation_id}
 
 
