@@ -14,6 +14,7 @@ import {
   fetchMeta,
   loadConversation,
   sendChat,
+  STATUS_LABEL,
   type ArtifactVersion,
   type ChatHistoryItem,
   type ChatResponse,
@@ -80,6 +81,9 @@ export default function Page() {
   const [historyLoading, setHistoryLoading] = React.useState(false)
   const [historyError, setHistoryError] = React.useState<string | null>(null)
   const [shortcutsOpen, setShortcutsOpen] = React.useState(false)
+  // Spoken when a turn settles. A reply arriving is a silent event otherwise:
+  // the skeleton announces the start, and then nothing says it finished.
+  const [announcement, setAnnouncement] = React.useState("")
   const [atBottom, setAtBottom] = React.useState(true)
   // Mirrored into a ref so the scroll effect can read it without listing it as
   // a dependency, which would re-run the effect every time it flipped.
@@ -274,6 +278,11 @@ export default function Page() {
         error: response.error,
       })
       setConnection("online")
+      const toolCount = response.tool_events.length
+      setAnnouncement(
+        `Turn ${index} ${STATUS_LABEL[response.status]}. ` +
+          `${toolCount === 0 ? "No tools called" : `${toolCount} tool${toolCount === 1 ? "" : "s"} called`}.`
+      )
       if (response.conversation_id) {
         setConversationId(response.conversation_id)
         refreshHistory()
@@ -290,6 +299,7 @@ export default function Page() {
             : turn
         )
       )
+      setAnnouncement(stopped ? `Turn ${index} stopped.` : `Turn ${index} failed. ${detail}`)
       if (!stopped) {
         setConnection("offline")
         recordsRef.current.push({
@@ -392,6 +402,12 @@ export default function Page() {
 
   return (
     <div className="flex min-h-dvh">
+      {/* Polite so it waits for a pause rather than interrupting, and atomic so
+          the whole sentence is read instead of only the changed words. */}
+      <p aria-live="polite" aria-atomic="true" className="sr-only">
+        {announcement}
+      </p>
+
       {historyEnabled && (
         <HistorySidebar
           open={sidebarOpen}
@@ -552,13 +568,17 @@ export default function Page() {
                 </span>
               ) : (
                 <>
-                  Enter to send, Shift+Enter for a new line.{" "}
+                  {/* The long form runs edge to edge on a 375px screen, so the
+                      hint sheds its first half there and keeps the link. */}
+                  <span className="hidden sm:inline">
+                    Enter to send, Shift+Enter for a new line.{" "}
+                  </span>
                   <button
                     type="button"
                     onClick={() => setShortcutsOpen(true)}
                     className="hover:text-foreground focus-visible:ring-ring rounded underline underline-offset-2 outline-none focus-visible:ring-2"
                   >
-                    All shortcuts
+                    Keyboard shortcuts
                   </button>
                 </>
               )}
