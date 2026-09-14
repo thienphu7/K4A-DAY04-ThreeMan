@@ -1,9 +1,11 @@
 "use client"
 
 import * as React from "react"
-import { CornerDownLeft, Loader2, Square } from "lucide-react"
+import { ArrowDown, CornerDownLeft, Loader2, Square } from "lucide-react"
 import { HistorySidebar } from "@/components/history-sidebar"
 import { RunHeader, type ConnectionState } from "@/components/run-header"
+import { SessionSummary } from "@/components/session-summary"
+import { ShortcutsDialog } from "@/components/shortcuts-dialog"
 import { TurnCard, type Turn } from "@/components/turn-card"
 import {
   ApiError,
@@ -77,6 +79,11 @@ export default function Page() {
   const [conversationId, setConversationId] = React.useState<string | null>(null)
   const [historyLoading, setHistoryLoading] = React.useState(false)
   const [historyError, setHistoryError] = React.useState<string | null>(null)
+  const [shortcutsOpen, setShortcutsOpen] = React.useState(false)
+  const [atBottom, setAtBottom] = React.useState(true)
+  // Mirrored into a ref so the scroll effect can read it without listing it as
+  // a dependency, which would re-run the effect every time it flipped.
+  const atBottomRef = React.useRef(true)
 
   const sessionRef = React.useRef({ createdAt: nowIso(), id: "" })
   const recordsRef = React.useRef<TranscriptTurn[]>([])
@@ -148,9 +155,40 @@ export default function Page() {
     return () => controller.abort()
   }, [historyEnabled, refreshHistory])
 
+  // Whether the end of the conversation is on screen. An IntersectionObserver
+  // on the bottom sentinel rather than a scroll listener: no work per frame,
+  // and it answers the question directly.
   React.useEffect(() => {
+    const sentinel = bottomRef.current
+    if (!sentinel) return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = entry?.isIntersecting ?? true
+        atBottomRef.current = visible
+        setAtBottom(visible)
+      },
+      { rootMargin: "0px 0px 140px 0px" }
+    )
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [])
+
+  // Follow the conversation only when the reader is already at the end.
+  // Scrolling up to re-read an earlier tool result and being yanked back down
+  // when the next turn lands is the fastest way to make a chat feel hostile.
+  React.useEffect(() => {
+    if (!atBottomRef.current) return
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
   }, [turns])
+
+  // Grow the composer to fit what has been typed, up to a ceiling, so a long
+  // multi-turn correction is visible while being written.
+  React.useEffect(() => {
+    const field = inputRef.current
+    if (!field) return
+    field.style.height = "auto"
+    field.style.height = `${Math.min(field.scrollHeight, 160)}px`
+  }, [input])
 
   React.useEffect(() => () => abortRef.current?.abort(), [])
 
@@ -166,6 +204,17 @@ export default function Page() {
         inputRef.current?.focus()
       } else if (event.key === "Escape" && abortRef.current) {
         abortRef.current.abort()
+      } else if (event.key === "?" && !mod) {
+        // Only when not typing, or the question mark could never be written.
+        const target = event.target as HTMLElement | null
+        const typing =
+          target?.tagName === "TEXTAREA" ||
+          target?.tagName === "INPUT" ||
+          target?.isContentEditable
+        if (!typing) {
+          event.preventDefault()
+          setShortcutsOpen(true)
+        }
       }
     }
     window.addEventListener("keydown", onKey)
@@ -402,6 +451,11 @@ export default function Page() {
             <EmptyState onPick={submit} disabled={sending || connection === "offline"} />
           ) : (
             <div className="space-y-8">
+              <SessionSummary
+                responses={turns
+                  .map((turn) => turn.response)
+                  .filter((response): response is NonNullable<typeof response> => !!response)}
+              />
               {turns.map((turn) => (
                 <TurnCard
                   key={turn.id}
@@ -418,6 +472,22 @@ export default function Page() {
         </main>
 
         <footer className="border-border bg-card/80 sticky bottom-0 border-t backdrop-blur">
+          {/* Only offered when it is needed: a jump-to-latest button that is
+              always on screen is a permanent reminder of a problem you do not
+              have. */}
+          {!atBottom && turns.length > 0 && (
+            <button
+              type="button"
+              onClick={() =>
+                bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+              }
+              className="border-border bg-card text-foreground hover:bg-muted focus-visible:ring-ring absolute -top-11 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs shadow-sm outline-none focus-visible:ring-2"
+            >
+              <ArrowDown aria-hidden="true" className="size-3" />
+              Latest
+            </button>
+          )}
+
           <form
             onSubmit={(event) => {
               event.preventDefault()
@@ -446,7 +516,10 @@ export default function Page() {
                 disabled={sending}
                 placeholder="Ask the helpdesk agent something"
                 aria-label="Message to the helpdesk agent"
-                className="border-border bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-ring max-h-40 min-h-[2.5rem] flex-1 resize-y rounded-lg border px-3 py-2 text-sm outline-none focus-visible:ring-2 disabled:opacity-60"
+                // Height is driven by content in an effect, so resizing is off:
+                // a hand-dragged height would be overwritten on the next
+                // keystroke, which reads as the box fighting you.
+                className="border-border bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-ring max-h-40 min-h-[2.5rem] flex-1 resize-none overflow-y-auto rounded-lg border px-3 py-2 text-sm outline-none focus-visible:ring-2 disabled:opacity-60"
               />
 
               {sending ? (
@@ -478,12 +551,23 @@ export default function Page() {
                   Running. Esc stops it; nothing has been written yet.
                 </span>
               ) : (
-                "Enter to send, Shift+Enter for a new line, Ctrl+K to focus"
+                <>
+                  Enter to send, Shift+Enter for a new line.{" "}
+                  <button
+                    type="button"
+                    onClick={() => setShortcutsOpen(true)}
+                    className="hover:text-foreground focus-visible:ring-ring rounded underline underline-offset-2 outline-none focus-visible:ring-2"
+                  >
+                    All shortcuts
+                  </button>
+                </>
               )}
             </p>
           </form>
         </footer>
       </div>
+
+      <ShortcutsDialog open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
     </div>
   )
 }
