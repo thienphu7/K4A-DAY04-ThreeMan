@@ -43,13 +43,18 @@ if LAB_ROOT is None:
     )
 sys.path.insert(0, str(LAB_ROOT))
 
-# Load local secrets only when a real checkout is present. On Vercel the keys
-# arrive as project environment variables and no .env is ever bundled.
-_LOCAL_ENV = _UI_ROOT.parent / "starter_v0" / ".env"
-if _LOCAL_ENV.exists():
-    from env_loader import load_dotenv  # type: ignore
+# Load local secrets only when a real checkout is present. On Vercel every key
+# arrives as a project environment variable and no .env is ever bundled.
+#
+# Two files, because they belong to different layers: the lab's own provider
+# keys live with the lab, and this UI's database credentials live with the UI.
+# Neither is committed, and process environment always wins so a Vercel value is
+# never overwritten by a stray file.
+from env_loader import load_dotenv  # type: ignore  # noqa: E402
 
-    load_dotenv(_LOCAL_ENV, override=False)
+for _env_file in (_UI_ROOT.parent / "starter_v0" / ".env", _UI_ROOT / ".env.local"):
+    if _env_file.exists():
+        load_dotenv(_env_file, override=False)
 
 import chat  # noqa: E402  the lab's own loop
 from providers import make_provider  # noqa: E402

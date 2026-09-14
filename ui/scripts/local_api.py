@@ -16,12 +16,19 @@ import json
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 UI_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(UI_ROOT / "api"))
 
-from _routes import MAX_BODY_BYTES, chat_response, meta_response  # noqa: E402
+from _routes import (  # noqa: E402
+    MAX_BODY_BYTES,
+    chat_response,
+    history_delete_response,
+    history_get_response,
+    history_list_response,
+    meta_response,
+)
 
 HOST = "127.0.0.1"
 PORT = 8787
@@ -40,11 +47,31 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self) -> None:  # noqa: N802
-        path = urlparse(self.path).path.rstrip("/")
+        parsed = urlparse(self.path)
+        path = parsed.path.rstrip("/")
+        query = parse_qs(parsed.query)
         if path in ("/api/meta", "/meta"):
             self._send(*meta_response())
+        elif path in ("/api/history", "/history"):
+            conversation_id = (query.get("id") or [None])[0]
+            if conversation_id:
+                self._send(*history_get_response(conversation_id))
+            else:
+                try:
+                    limit = int((query.get("limit") or ["50"])[0])
+                except ValueError:
+                    limit = 50
+                self._send(*history_list_response(limit))
         else:
             self._send(404, {"error": "not_found", "path": path})
+
+    def do_DELETE(self) -> None:  # noqa: N802
+        parsed = urlparse(self.path)
+        if parsed.path.rstrip("/") not in ("/api/history", "/history"):
+            self._send(404, {"error": "not_found", "path": parsed.path})
+            return
+        conversation_id = (parse_qs(parsed.query).get("id") or [None])[0]
+        self._send(*history_delete_response(conversation_id))
 
     def do_POST(self) -> None:  # noqa: N802
         path = urlparse(self.path).path.rstrip("/")
