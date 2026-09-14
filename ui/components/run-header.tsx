@@ -1,6 +1,6 @@
 "use client"
 
-import { Download, Hash, RotateCcw } from "lucide-react"
+import { Download, Hash, PanelLeft, RotateCcw } from "lucide-react"
 import type { ArtifactVersion } from "@/lib/api"
 import { cn } from "@/lib/utils"
 
@@ -13,6 +13,9 @@ interface RunHeaderProps {
   connection: ConnectionState
   turnCount: number
   busy: boolean
+  /** Hidden when no database is configured, since there would be nothing to show. */
+  showSidebarToggle: boolean
+  onToggleSidebar: () => void
   onDownload: () => void
   onClear: () => void
 }
@@ -38,6 +41,8 @@ export function RunHeader({
   connection,
   turnCount,
   busy,
+  showSidebarToggle,
+  onToggleSidebar,
   onDownload,
   onClear,
 }: RunHeaderProps) {
@@ -45,8 +50,19 @@ export function RunHeader({
 
   return (
     <header className="border-border bg-card/80 sticky top-0 z-20 border-b backdrop-blur">
-      <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
+      <div className="mx-auto flex w-full max-w-4xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
         <div className="flex min-w-0 items-center gap-2.5">
+          {showSidebarToggle && (
+            <button
+              type="button"
+              onClick={onToggleSidebar}
+              aria-label="Toggle conversation history"
+              title="Conversation history (Ctrl+B)"
+              className="text-muted-foreground hover:text-foreground hover:bg-muted focus-visible:ring-ring -ml-1 rounded-md p-1.5 outline-none focus-visible:ring-2"
+            >
+              <PanelLeft aria-hidden="true" className="size-4" />
+            </button>
+          )}
           {/* Real state, not decoration: this is the only signal that the Python
               side is actually answering before you spend a turn finding out. */}
           <span

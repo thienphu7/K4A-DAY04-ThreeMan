@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Check, Copy, RefreshCw, TriangleAlert, User } from "lucide-react"
+import { Activity, Check, Copy, RefreshCw, TriangleAlert, User } from "lucide-react"
 import { AgentTrace } from "@/components/ui/agent-trace"
 import { JsonViewer } from "@/components/json-viewer"
 import { ToolEventList } from "@/components/tool-event-list"
@@ -32,9 +32,12 @@ interface TurnCardProps {
   /** Re-sends this turn's message. Present on every outcome that can be retried. */
   onRetry: (turn: Turn) => void
   busy: boolean
+  /** Whether the timeline starts open. Remembered across turns by the page. */
+  showTrace: boolean
+  onShowTraceChange: (show: boolean) => void
 }
 
-export function TurnCard({ turn, onRetry, busy }: TurnCardProps) {
+export function TurnCard({ turn, onRetry, busy, showTrace, onShowTraceChange }: TurnCardProps) {
   return (
     <article className="space-y-3">
       <UserMessage text={turn.user} />
@@ -56,7 +59,14 @@ export function TurnCard({ turn, onRetry, busy }: TurnCardProps) {
           busy={busy}
         />
       ) : turn.response ? (
-        <AgentAnswer turn={turn} response={turn.response} onRetry={onRetry} busy={busy} />
+        <AgentAnswer
+          turn={turn}
+          response={turn.response}
+          onRetry={onRetry}
+          busy={busy}
+          showTrace={showTrace}
+          onShowTraceChange={onShowTraceChange}
+        />
       ) : (
         <PendingAnswer />
       )}
@@ -82,13 +92,19 @@ function AgentAnswer({
   response,
   onRetry,
   busy,
+  showTrace,
+  onShowTraceChange,
 }: {
   turn: Turn
   response: ChatResponse
   onRetry: (turn: Turn) => void
   busy: boolean
+  showTrace: boolean
+  onShowTraceChange: (show: boolean) => void
 }) {
   const rounds = response.rounds?.length ?? 0
+  // Real tokens off the provider's usage metadata, summed across model spans.
+  const tokens = response.spans.reduce((total, span) => total + (span.tokens ?? 0), 0)
   // The envelope is only worth showing when it carried something the reply did
   // not, which is exactly when a grader wants to see it.
   const showEnvelope =
@@ -123,6 +139,15 @@ function AgentAnswer({
           </span>
         )}
 
+        {tokens > 0 && (
+          <span
+            title="Tokens billed to this turn, from the provider's usage metadata"
+            className="text-muted-foreground font-mono text-[11px] tabular-nums"
+          >
+            {tokens.toLocaleString("en-US")} tk
+          </span>
+        )}
+
         {response.reply && <CopyButton text={response.reply} />}
       </div>
 
@@ -149,19 +174,39 @@ function AgentAnswer({
         </p>
       )}
 
+      {/* The timeline is opt-in. Most of the time the reply and the tool calls
+          are the answer; the millisecond breakdown is something you go looking
+          for when a run behaved oddly, so it should not sit in the way of
+          reading the conversation. The choice is remembered across turns. */}
       {response.spans.length > 0 && (
-        <AgentTrace
-          spans={response.spans}
-          duration={response.duration_ms}
-          runId={`turn_${turn.index}`}
-          model={response.model}
-          autoPlay={false}
-          // A finished run is the useful resting state: this is evidence to
-          // read, not a loop to watch, so the playhead starts at the end.
-          defaultTime={response.duration_ms}
-          rowHeight={32}
-          labelWidth={180}
-        />
+        <div>
+          <button
+            type="button"
+            onClick={() => onShowTraceChange(!showTrace)}
+            aria-expanded={showTrace}
+            className="text-muted-foreground hover:text-foreground focus-visible:ring-ring inline-flex items-center gap-1.5 rounded font-mono text-[11px] outline-none focus-visible:ring-2"
+          >
+            <Activity aria-hidden="true" className="size-3" />
+            {showTrace ? "Hide timeline" : `Timeline (${response.spans.length} spans)`}
+          </button>
+
+          {showTrace && (
+            <div className="mt-2">
+              <AgentTrace
+                spans={response.spans}
+                duration={response.duration_ms}
+                runId={`turn_${turn.index}`}
+                model={response.model}
+                autoPlay={false}
+                // A finished run is the useful resting state: this is evidence
+                // to read, not a loop to watch, so it starts at the end.
+                defaultTime={response.duration_ms}
+                rowHeight={32}
+                labelWidth={180}
+              />
+            </div>
+          )}
+        </div>
       )}
 
       {response.tool_events.length > 0 ? (
