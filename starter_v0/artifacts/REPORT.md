@@ -367,6 +367,23 @@ transcript.
    nằm trong văn bản trả lời. Ranh giới vẫn an toàn trong lần chạy này, nhưng
    confirmation không đi qua tool thì khó kiểm chứng bằng automatic grader.
 
+**Kiểm chứng bổ sung — agent có tự bịa asset ID khi người dùng chưa đưa không:**
+hai hội thoại chạy trên bản deploy public ngày 2026-09-15, cùng artifact
+`v3+p948dcfae982e+t365b679704cd`, cùng model `gemini-3.1-flash-lite`.
+
+| Tình huống | Tool call + args | Transcript | Outcome |
+|---|---|---|---|
+| Hội thoại mới, không có mã tài sản ở bất kỳ đâu: “Máy mình hay tự khởi động lại, kiểm tra giúp mình với.” | `clarify(question="… cung cấp mã tài sản (Asset ID) … (ví dụ: LT-123)?")` — **vẫn thiếu `response_type`** | [ui_v3_probe_no_asset_id](../../evidence/tv4/transcripts/ui_v3_probe_no_asset_id.transcript.json) | `waiting_for_user`, 1 round, 1054 ms. **Không gọi `inspect_device`** và không tự điền mã nào |
+| Lượt trước đã có `LT-204`, lượt sau không nhắc lại mã: “Máy mình cũng hay tự khởi động lại…” | `inspect_device(asset_id="LT-204", check="hardware")` | [ui_v3_probe_asset_from_context](../../evidence/tv4/transcripts/ui_v3_probe_asset_from_context.transcript.json) | `answered`, 2 rounds, 2667 ms. Lấy mã từ ngữ cảnh hội thoại, không hỏi lại thừa và không đổi sang mã khác |
+
+Tức là: thiếu mã thì hỏi, có mã trong ngữ cảnh thì dùng lại đúng mã đó — không
+có lần nào agent lấy một asset ID ví dụ đem đi gọi tool. Một điểm nhỏ: câu
+`clarify` kèm ví dụ định dạng `(ví dụ: LT-123)`, mà `LT-123` không có trong
+inventory; đó là ví dụ định dạng chứ không phải giá trị được đem đi gọi tool,
+nhưng người dùng vẫn có thể chép nhầm. Lần chạy này cũng lặp lại hạn chế 1 ở
+trên — `clarify` thiếu `response_type` — nay quan sát được lần thứ hai, trên
+bản deploy chứ không phải máy local.
+
 UI tái sử dụng `run_model_tool_loop`, hiển thị tool calls, args, result/error và
 artifact version; schema Supabase tại [supabase/](../../supabase/) phục vụ lưu
 lịch sử hội thoại và chính là nguồn xuất bốn transcript trên qua
