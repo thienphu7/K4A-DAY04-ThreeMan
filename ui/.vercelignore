@@ -1,0 +1,7 @@
+# Vercel follows .gitignore by default, which would drop the vendored lab copy.
+# .lab/ is the only way the serverless function can reach starter_v0 when this
+# folder is uploaded on its own, so it has to survive the ignore rules.
+!.lab
+
+node_modules
+.next

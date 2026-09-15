@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/*
+  Day 04 IT Helpdesk Agent - trace viewer tokens.
+
+  The page is LOCKED to dark. This is an operator console read by someone
+  auditing tool calls, not a marketing page, so there is no light variant and no
+  section ever inverts. Every colour below is defined once here and consumed
+  through semantic classes (bg-card, text-muted-foreground, bg-primary, ...).
+  Nothing downstream should hard-code a hex value; that is what keeps the accent
+  identical in every component.
+
+  Accent is jade rather than the usual blue or violet: the trace already spends
+  red on failed spans, and jade stays legible next to it without reading as
+  another error state.
+*/
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  color-scheme: dark;
+
+  /* One radius scale for the whole page. */
+  --radius: 0.5rem;
+
+  /* Off-black, never #000000: pure black flattens the elevation between the
+     page, the cards and the trace rows. */
+  --background: oklch(0.165 0.004 285);
+  --foreground: oklch(0.96 0.002 285);
+
+  --card: oklch(0.205 0.005 285);
+  --card-foreground: oklch(0.96 0.002 285);
+
+  --popover: oklch(0.205 0.005 285);
+  --popover-foreground: oklch(0.96 0.002 285);
+
+  /* Jade accent. Used for the playhead, primary actions and agent/model spans. */
+  --primary: oklch(0.72 0.142 162);
+  --primary-foreground: oklch(0.16 0.02 162);
+
+  --secondary: oklch(0.26 0.006 285);
+  --secondary-foreground: oklch(0.96 0.002 285);
+
+  --muted: oklch(0.26 0.006 285);
+  /* 0.72 lightness against the 0.205 card is ~7.2:1, so secondary text and the
+     trace's queued rows stay above WCAG AA without going pure white. */
+  --muted-foreground: oklch(0.72 0.006 285);
+
+  --accent: oklch(0.26 0.006 285);
+  --accent-foreground: oklch(0.96 0.002 285);
+
+  --destructive: oklch(0.63 0.2 25);
+  --destructive-foreground: oklch(0.98 0.005 25);
+
+  --border: oklch(0.28 0.006 285);
+  --input: oklch(0.28 0.006 285);
+  --ring: oklch(0.72 0.142 162);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Tool results are raw JSON and can be wide. Scroll them inside their own
+     container rather than letting the page scroll sideways. */
+  pre {
+    overflow-x: auto;
+  }
+}
+
+/* Motion is opt-in. Anything that animates must also be correct when it does
+   not, so the reduced-motion path disables rather than shortens. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
