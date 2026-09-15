@@ -532,18 +532,39 @@ có thể đối chiếu đóng góp.
 
 ### Nguyễn Đức Anh — 2A202602508 (TV3, lovelypoet)
 
-> Chờ Nguyễn Đức Anh tự viết và commit mục này. Chỉ thay nội dung trong mục
-> của mình; giữ nguyên các mục của thành viên khác. Trả lời đủ tám ý dưới đây
-> bằng trải nghiệm thực tế và dẫn contribution có thật.
-
-- **Vai trò/phần việc được nhận:**
-- **Những gì tôi đã thay đổi trong repo chung:**
+- **Vai trò/phần việc được nhận:** Tôi là TV3, phụ trách cải thiện tool contract
+  cho artifact v2, đặc biệt là phạm vi tool, schema argument và routing của
+  policy tool.
+- **Những gì tôi đã thay đổi trong repo chung:** Tôi cập nhật
+  `starter_v0/artifacts/tools.yaml` và các file `TOOL.md` để mô tả rõ hơn
+  input, output, giới hạn sử dụng và điều kiện xác nhận. Tôi bổ sung evidence
+  cho tool contract v2, sau đó sửa riêng policy contract để phân biệt routing
+  policy với các yêu cầu không thuộc phạm vi policy.
 - **File hoặc artifact liên quan:**
+  [tools.yaml](tools.yaml), các tài liệu tool trong
+  [starter_v0/tools](../tools/), và
+  [evidence_tv3_tool_contract_v2.md](evidence_tv3_tool_contract_v2.md).
 - **Commit hash hoặc pull request:**
-- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:**
-- **Khó khăn tôi gặp và cách tôi xử lý:**
-- **Điều tôi học được từ phần việc này:**
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:**
+  [62189cb — improve v2 tool contracts](https://github.com/thienphu7/K4A-DAY04-ThreeMan/commit/62189cb),
+  [6b8a6b2 — clarify policy routing contract](https://github.com/thienphu7/K4A-DAY04-ThreeMan/commit/6b8a6b2).
+  Phần self-reflection này được thực hiện trên nhánh `ducanh` để tạo pull
+  request riêng vào `main`.
+- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:** Tôi chọn làm rõ contract
+  ở lớp declaration và tài liệu tool thay vì chỉ sửa câu chữ prompt. Cách này
+  giúp model nhận được phạm vi và kiểu argument nhất quán hơn, đồng thời có
+  thể đối chiếu thay đổi với hash của artifact và run v2.
+- **Khó khăn tôi gặp và cách tôi xử lý:** Khó khăn chính là phân biệt lỗi
+  routing, lỗi argument và lỗi do prompt trong khi nhiều tool có tên và mục
+  đích gần nhau. Tôi đối chiếu từng schema với policy nội bộ, ghi lại artifact
+  v2 và giữ riêng lần sửa policy contract để dễ kiểm tra regression.
+- **Điều tôi học được từ phần việc này:** Tool description là một phần của
+  giao diện an toàn giữa model và hệ thống, không chỉ là chú thích. Mô tả
+  phạm vi, identifier và confirmation không rõ ràng có thể làm kết quả
+  routing hoặc argument sai dù prompt tổng thể vẫn có vẻ hợp lý.
+- **Nếu làm lại, tôi sẽ cải thiện điều gì:** Tôi sẽ viết test contract tự động
+  cho các boundary quan trọng, nhất là policy routing và write action, trước
+  khi chạy full evaluation. Tôi cũng sẽ ghi rõ hơn mapping giữa từng thay đổi
+  declaration và case eval tương ứng để review nhanh hơn.
 
 ### Hoàng Quốc Việt — 2A202602563 (TV4, viethwang)
 
