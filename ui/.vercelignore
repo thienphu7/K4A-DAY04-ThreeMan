@@ -1,7 +1,19 @@
-# Vercel follows .gitignore by default, which would drop the vendored lab copy.
-# .lab/ is the only way the serverless function can reach starter_v0 when this
-# folder is uploaded on its own, so it has to survive the ignore rules.
+# What Vercel uploads from this folder.
+#
+# Two rules that bite together:
+#   1. Without this file, Vercel falls back to .gitignore - which hides .lab/,
+#      the vendored copy of starter_v0 the Python functions import. A CLI
+#      deployment of ui/ on its own would then ship functions that import
+#      nothing and fail on the first request.
+#   2. With this file, .gitignore stops applying entirely - it is a replacement,
+#      not an addition. Everything .gitignore was keeping out has to be repeated
+#      below, or `vercel deploy` uploads the real .env.local alongside the code.
 !.lab
 
 node_modules
 .next
+
+.env*
+.vercel
+.agy-brief.md
+*.tsbuildinfo
