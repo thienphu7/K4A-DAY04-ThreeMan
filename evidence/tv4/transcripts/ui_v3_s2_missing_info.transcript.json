@@ -1,0 +1,246 @@
+{
+  "transcript_id": "v3_gemini_20260915T060750",
+  "source": "ui",
+  "version": "v3",
+  "artifact_version": "v3+p948dcfae982e+t365b679704cd",
+  "prompt_hash": "948dcfae982ec84b1fa294d42d1fd714eff496beabad676264616e211f45e3df",
+  "tools_hash": "365b679704cd72563d53980f455616921aa026c28386b81619c72dc8164653cd",
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite",
+  "created_at": "2026-09-15T06:07:50",
+  "updated_at": "2026-09-15T06:08:19",
+  "conversation_id": "52979f99-37fe-4e6b-a9eb-8a6b0b268ca0",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T06:07:51",
+      "ended_at": "2026-09-15T06:07:51",
+      "user": "Kiểm tra Wi-Fi trên laptop của mình giúp nhé.",
+      "status": "waiting_for_user",
+      "assistant_text": "Để kiểm tra Wi-Fi, bạn vui lòng cung cấp mã tài sản (Asset ID) của laptop (ví dụ: LT-123)?",
+      "reply": "Để kiểm tra Wi-Fi, bạn vui lòng cung cấp mã tài sản (Asset ID) của laptop (ví dụ: LT-123)?",
+      "rounds": [
+        {
+          "round": 1,
+          "tool_calls": [
+            {
+              "args": {
+                "question": "Để kiểm tra Wi-Fi, bạn vui lòng cung cấp mã tài sản (Asset ID) của laptop (ví dụ: LT-123)?"
+              },
+              "name": "clarify"
+            }
+          ],
+          "tool_results": [
+            {
+              "args": {
+                "question": "Để kiểm tra Wi-Fi, bạn vui lòng cung cấp mã tài sản (Asset ID) của laptop (ví dụ: LT-123)?"
+              },
+              "tool": "clarify",
+              "result": {
+                "tool": "clarify",
+                "options": [],
+                "question": "Để kiểm tra Wi-Fi, bạn vui lòng cung cấp mã tài sản (Asset ID) của laptop (ví dụ: LT-123)?",
+                "awaiting_user": true,
+                "response_type": "text"
+              }
+            }
+          ],
+          "assistant_text": null
+        }
+      ],
+      "tool_events": [
+        {
+          "args": {
+            "question": "Để kiểm tra Wi-Fi, bạn vui lòng cung cấp mã tài sản (Asset ID) của laptop (ví dụ: LT-123)?"
+          },
+          "tool": "clarify",
+          "result": {
+            "tool": "clarify",
+            "options": [],
+            "question": "Để kiểm tra Wi-Fi, bạn vui lòng cung cấp mã tài sản (Asset ID) của laptop (ví dụ: LT-123)?",
+            "awaiting_user": true,
+            "response_type": "text"
+          }
+        }
+      ],
+      "spans": [
+        {
+          "id": "round-1",
+          "end": 2143,
+          "kind": "agent",
+          "label": "round 1",
+          "start": 0,
+          "detail": "1 call",
+          "status": "ok"
+        },
+        {
+          "id": "round-1-model",
+          "end": 2143,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 0,
+          "detail": "1 tool call",
+          "status": "ok",
+          "tokens": 3192,
+          "parentId": "round-1"
+        },
+        {
+          "id": "round-1-tool-0",
+          "end": 2144,
+          "kind": "io",
+          "label": "clarify",
+          "start": 2143,
+          "detail": "awaiting user",
+          "status": "ok",
+          "parentId": "round-1"
+        }
+      ],
+      "duration_ms": 2144,
+      "retries": 0,
+      "error": null
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-09-15T06:08:19",
+      "ended_at": "2026-09-15T06:08:19",
+      "user": "Mã tài sản là LT-204.",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"check_network\",\n  \"action\": \"none\",\n  \"reply\": \"Kết quả kiểm tra cho laptop LT-204 cho thấy kết nối mạng đang hoạt động bình thường (online), độ trễ là 24 ms và DNS ổn định. Hiện tại không phát hiện vấn đề gì với Wi-Fi trên thiết bị của bạn.\",\n  \"evidence_ids\": [\n    \"LT-204\"\n  ]\n}",
+      "reply": "Kết quả kiểm tra cho laptop LT-204 cho thấy kết nối mạng đang hoạt động bình thường (online), độ trễ là 24 ms và DNS ổn định. Hiện tại không phát hiện vấn đề gì với Wi-Fi trên thiết bị của bạn.",
+      "rounds": [
+        {
+          "round": 1,
+          "tool_calls": [
+            {
+              "args": {
+                "check": "network",
+                "asset_id": "LT-204"
+              },
+              "name": "inspect_device"
+            }
+          ],
+          "tool_results": [
+            {
+              "args": {
+                "check": "network",
+                "asset_id": "LT-204"
+              },
+              "tool": "inspect_device",
+              "result": {
+                "tool": "inspect_device",
+                "check": "network",
+                "device": {
+                  "os": "Windows 11 23H2",
+                  "type": "laptop",
+                  "model": "ThinkPad T14 Gen 4",
+                  "asset_id": "LT-204",
+                  "location": "Bangkok floor 3",
+                  "assigned_to": "EMP-1001",
+                  "manufacturer": "Lenovo",
+                  "purchase_date": "2024-02-12",
+                  "warranty_until": "2027-02-11"
+                },
+                "asset_id": "LT-204",
+                "diagnostics": {
+                  "network": "online; latency 24 ms; DNS healthy"
+                },
+                "snapshot_at": "2026-09-14T09:00:00+07:00"
+              }
+            }
+          ],
+          "assistant_text": null
+        },
+        {
+          "round": 2,
+          "tool_calls": [],
+          "tool_results": [],
+          "assistant_text": "{\n  \"intent\": \"check_network\",\n  \"action\": \"none\",\n  \"reply\": \"Kết quả kiểm tra cho laptop LT-204 cho thấy kết nối mạng đang hoạt động bình thường (online), độ trễ là 24 ms và DNS ổn định. Hiện tại không phát hiện vấn đề gì với Wi-Fi trên thiết bị của bạn.\",\n  \"evidence_ids\": [\n    \"LT-204\"\n  ]\n}"
+        }
+      ],
+      "tool_events": [
+        {
+          "args": {
+            "check": "network",
+            "asset_id": "LT-204"
+          },
+          "tool": "inspect_device",
+          "result": {
+            "tool": "inspect_device",
+            "check": "network",
+            "device": {
+              "os": "Windows 11 23H2",
+              "type": "laptop",
+              "model": "ThinkPad T14 Gen 4",
+              "asset_id": "LT-204",
+              "location": "Bangkok floor 3",
+              "assigned_to": "EMP-1001",
+              "manufacturer": "Lenovo",
+              "purchase_date": "2024-02-12",
+              "warranty_until": "2027-02-11"
+            },
+            "asset_id": "LT-204",
+            "diagnostics": {
+              "network": "online; latency 24 ms; DNS healthy"
+            },
+            "snapshot_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ],
+      "spans": [
+        {
+          "id": "round-1",
+          "end": 2215,
+          "kind": "agent",
+          "label": "round 1",
+          "start": 0,
+          "detail": "1 call",
+          "status": "ok"
+        },
+        {
+          "id": "round-1-model",
+          "end": 2214,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 0,
+          "detail": "1 tool call",
+          "status": "ok",
+          "tokens": 3219,
+          "parentId": "round-1"
+        },
+        {
+          "id": "round-1-tool-0",
+          "end": 2215,
+          "kind": "tool",
+          "label": "inspect_device",
+          "start": 2214,
+          "detail": "asset_id=LT-204",
+          "status": "ok",
+          "parentId": "round-1"
+        },
+        {
+          "id": "round-2",
+          "end": 4821,
+          "kind": "agent",
+          "label": "round 2",
+          "start": 2215,
+          "detail": "0 calls",
+          "status": "ok"
+        },
+        {
+          "id": "round-2-model",
+          "end": 4821,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 2215,
+          "detail": "0 tool calls",
+          "status": "ok",
+          "tokens": 3698,
+          "parentId": "round-2"
+        }
+      ],
+      "duration_ms": 4821,
+      "retries": 0,
+      "error": null
+    }
+  ]
+}

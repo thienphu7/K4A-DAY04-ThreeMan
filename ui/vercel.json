@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "node scripts/sync-lab.mjs && npm install",
+  "functions": {
+    "api/chat.py": {
+      "includeFiles": ".lab/**",
+      "maxDuration": 60
+    },
+    "api/meta.py": {
+      "includeFiles": ".lab/**",
+      "maxDuration": 15
+    },
+    "api/history.py": {
+      "includeFiles": ".lab/**",
+      "maxDuration": 30
+    }
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "transcript_id": "v3_gemini_20260915T060724",
+  "source": "ui",
+  "version": "v3",
+  "artifact_version": "v3+p948dcfae982e+t365b679704cd",
+  "prompt_hash": "948dcfae982ec84b1fa294d42d1fd714eff496beabad676264616e211f45e3df",
+  "tools_hash": "365b679704cd72563d53980f455616921aa026c28386b81619c72dc8164653cd",
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite",
+  "created_at": "2026-09-15T06:07:24",
+  "updated_at": "2026-09-15T06:07:25",
+  "conversation_id": "9e6d9cc7-fa52-4da7-8a0a-12677a927c94",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T06:07:25",
+      "ended_at": "2026-09-15T06:07:25",
+      "user": "Dịch vụ VPN production hiện có đang gặp sự cố không?",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"check_service_status\",\n  \"action\": \"none\",\n  \"reply\": \"Dịch vụ VPN trong môi trường production hiện đang bị suy giảm hiệu năng (degraded). Sự cố (INC-1042) gây ra lỗi xác thực không liên tục cho một số máy khách Windows tại Bangkok và người dùng từ xa. Sự cố bắt đầu từ 07:35 sáng nay. Bạn có thể thử khắc phục bằng cách đồng bộ hóa đồng hồ thiết bị và thử lại một lần. Nếu vẫn không được, vui lòng cho tôi biết để được hỗ trợ thêm.\",\n  \"evidence_ids\": [\n    \"INC-1042\"\n  ]\n}",
+      "reply": "Dịch vụ VPN trong môi trường production hiện đang bị suy giảm hiệu năng (degraded). Sự cố (INC-1042) gây ra lỗi xác thực không liên tục cho một số máy khách Windows tại Bangkok và người dùng từ xa. Sự cố bắt đầu từ 07:35 sáng nay. Bạn có thể thử khắc phục bằng cách đồng bộ hóa đồng hồ thiết bị và thử lại một lần. Nếu vẫn không được, vui lòng cho tôi biết để được hỗ trợ thêm.",
+      "rounds": [
+        {
+          "round": 1,
+          "tool_calls": [
+            {
+              "args": {
+                "service": "vpn",
+                "environment": "production"
+              },
+              "name": "check_service_status"
+            }
+          ],
+          "tool_results": [
+            {
+              "args": {
+                "service": "vpn",
+                "environment": "production"
+              },
+              "tool": "check_service_status",
+              "result": {
+                "tool": "check_service_status",
+                "status": "degraded",
+                "service": "vpn",
+                "incident": "Intermittent authentication failures for some Windows clients",
+                "checked_at": "2026-09-14T09:00:00+07:00",
+                "started_at": "2026-09-14T07:35:00+07:00",
+                "workaround": "Retry once after synchronizing the device clock",
+                "environment": "production",
+                "incident_id": "INC-1042",
+                "last_updated": "2026-09-14T08:50:00+07:00",
+                "affected_locations": [
+                  "Bangkok",
+                  "Remote"
+                ]
+              }
+            }
+          ],
+          "assistant_text": null
+        },
+        {
+          "round": 2,
+          "tool_calls": [],
+          "tool_results": [],
+          "assistant_text": "{\n  \"intent\": \"check_service_status\",\n  \"action\": \"none\",\n  \"reply\": \"Dịch vụ VPN trong môi trường production hiện đang bị suy giảm hiệu năng (degraded). Sự cố (INC-1042) gây ra lỗi xác thực không liên tục cho một số máy khách Windows tại Bangkok và người dùng từ xa. Sự cố bắt đầu từ 07:35 sáng nay. Bạn có thể thử khắc phục bằng cách đồng bộ hóa đồng hồ thiết bị và thử lại một lần. Nếu vẫn không được, vui lòng cho tôi biết để được hỗ trợ thêm.\",\n  \"evidence_ids\": [\n    \"INC-1042\"\n  ]\n}"
+        }
+      ],
+      "tool_events": [
+        {
+          "args": {
+            "service": "vpn",
+            "environment": "production"
+          },
+          "tool": "check_service_status",
+          "result": {
+            "tool": "check_service_status",
+            "status": "degraded",
+            "service": "vpn",
+            "incident": "Intermittent authentication failures for some Windows clients",
+            "checked_at": "2026-09-14T09:00:00+07:00",
+            "started_at": "2026-09-14T07:35:00+07:00",
+            "workaround": "Retry once after synchronizing the device clock",
+            "environment": "production",
+            "incident_id": "INC-1042",
+            "last_updated": "2026-09-14T08:50:00+07:00",
+            "affected_locations": [
+              "Bangkok",
+              "Remote"
+            ]
+          }
+        }
+      ],
+      "spans": [
+        {
+          "id": "round-1",
+          "end": 2923,
+          "kind": "agent",
+          "label": "round 1",
+          "start": 0,
+          "detail": "1 call",
+          "status": "ok"
+        },
+        {
+          "id": "round-1-model",
+          "end": 2922,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 0,
+          "detail": "1 tool call",
+          "status": "ok",
+          "tokens": 3171,
+          "parentId": "round-1"
+        },
+        {
+          "id": "round-1-tool-0",
+          "end": 2924,
+          "kind": "tool",
+          "label": "check_service_status",
+          "start": 2923,
+          "detail": "status=degraded",
+          "status": "ok",
+          "parentId": "round-1"
+        },
+        {
+          "id": "round-2",
+          "end": 5319,
+          "kind": "agent",
+          "label": "round 2",
+          "start": 2923,
+          "detail": "0 calls",
+          "status": "ok"
+        },
+        {
+          "id": "round-2-model",
+          "end": 5319,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 2923,
+          "detail": "0 tool calls",
+          "status": "ok",
+          "tokens": 3674,
+          "parentId": "round-2"
+        }
+      ],
+      "duration_ms": 5319,
+      "retries": 0,
+      "error": null
+    }
+  ]
+}

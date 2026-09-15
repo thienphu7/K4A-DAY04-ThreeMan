@@ -1,0 +1,192 @@
+{
+  "transcript_id": "v3_gemini_20260915T060950",
+  "source": "ui",
+  "version": "v3",
+  "artifact_version": "v3+p948dcfae982e+t365b679704cd",
+  "prompt_hash": "948dcfae982ec84b1fa294d42d1fd714eff496beabad676264616e211f45e3df",
+  "tools_hash": "365b679704cd72563d53980f455616921aa026c28386b81619c72dc8164653cd",
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite",
+  "created_at": "2026-09-15T06:09:50",
+  "updated_at": "2026-09-15T06:10:46",
+  "conversation_id": "c6e0b300-332b-49fe-9f2e-f7cdc75dfb69",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T06:09:51",
+      "ended_at": "2026-09-15T06:09:51",
+      "user": "Mở ticket cho sự cố VPN trên LT-204, mức ưu tiên medium giúp mình.",
+      "status": "waiting_for_user",
+      "assistant_text": "Bạn có muốn xác nhận tạo ticket với các thông tin sau không?\n- Tóm tắt: Sự cố VPN trên LT-204\n- Mức ưu tiên: medium\n- ID tài sản: LT-204",
+      "reply": "Bạn có muốn xác nhận tạo ticket với các thông tin sau không?\n- Tóm tắt: Sự cố VPN trên LT-204\n- Mức ưu tiên: medium\n- ID tài sản: LT-204",
+      "rounds": [
+        {
+          "round": 1,
+          "tool_calls": [
+            {
+              "args": {
+                "question": "Bạn có muốn xác nhận tạo ticket với các thông tin sau không?\n- Tóm tắt: Sự cố VPN trên LT-204\n- Mức ưu tiên: medium\n- ID tài sản: LT-204",
+                "response_type": "yes_no"
+              },
+              "name": "clarify"
+            }
+          ],
+          "tool_results": [
+            {
+              "args": {
+                "question": "Bạn có muốn xác nhận tạo ticket với các thông tin sau không?\n- Tóm tắt: Sự cố VPN trên LT-204\n- Mức ưu tiên: medium\n- ID tài sản: LT-204",
+                "response_type": "yes_no"
+              },
+              "tool": "clarify",
+              "result": {
+                "tool": "clarify",
+                "options": [],
+                "question": "Bạn có muốn xác nhận tạo ticket với các thông tin sau không?\n- Tóm tắt: Sự cố VPN trên LT-204\n- Mức ưu tiên: medium\n- ID tài sản: LT-204",
+                "awaiting_user": true,
+                "response_type": "yes_no"
+              }
+            }
+          ],
+          "assistant_text": null
+        }
+      ],
+      "tool_events": [
+        {
+          "args": {
+            "question": "Bạn có muốn xác nhận tạo ticket với các thông tin sau không?\n- Tóm tắt: Sự cố VPN trên LT-204\n- Mức ưu tiên: medium\n- ID tài sản: LT-204",
+            "response_type": "yes_no"
+          },
+          "tool": "clarify",
+          "result": {
+            "tool": "clarify",
+            "options": [],
+            "question": "Bạn có muốn xác nhận tạo ticket với các thông tin sau không?\n- Tóm tắt: Sự cố VPN trên LT-204\n- Mức ưu tiên: medium\n- ID tài sản: LT-204",
+            "awaiting_user": true,
+            "response_type": "yes_no"
+          }
+        }
+      ],
+      "spans": [
+        {
+          "id": "round-1",
+          "end": 2171,
+          "kind": "agent",
+          "label": "round 1",
+          "start": 0,
+          "detail": "1 call",
+          "status": "ok"
+        },
+        {
+          "id": "round-1-model",
+          "end": 2171,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 0,
+          "detail": "1 tool call",
+          "status": "ok",
+          "tokens": 3227,
+          "parentId": "round-1"
+        },
+        {
+          "id": "round-1-tool-0",
+          "end": 2172,
+          "kind": "io",
+          "label": "clarify",
+          "start": 2171,
+          "detail": "awaiting user",
+          "status": "ok",
+          "parentId": "round-1"
+        }
+      ],
+      "duration_ms": 2172,
+      "retries": 0,
+      "error": null
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-09-15T06:10:17",
+      "ended_at": "2026-09-15T06:10:17",
+      "user": "Đổi mức ưu tiên thành high giúp mình.",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"confirm_ticket_update\",\n  \"action\": \"clarify\",\n  \"reply\": \"Bạn có muốn xác nhận tạo ticket với các thông tin đã cập nhật sau không?\\n- Tóm tắt: Sự cố VPN trên LT-204\\n- Mức ưu tiên: high\\n- ID tài sản: LT-204\",\n  \"evidence_ids\": []\n}",
+      "reply": "Bạn có muốn xác nhận tạo ticket với các thông tin đã cập nhật sau không?\n- Tóm tắt: Sự cố VPN trên LT-204\n- Mức ưu tiên: high\n- ID tài sản: LT-204",
+      "rounds": [
+        {
+          "round": 1,
+          "tool_calls": [],
+          "tool_results": [],
+          "assistant_text": "{\n  \"intent\": \"confirm_ticket_update\",\n  \"action\": \"clarify\",\n  \"reply\": \"Bạn có muốn xác nhận tạo ticket với các thông tin đã cập nhật sau không?\\n- Tóm tắt: Sự cố VPN trên LT-204\\n- Mức ưu tiên: high\\n- ID tài sản: LT-204\",\n  \"evidence_ids\": []\n}"
+        }
+      ],
+      "tool_events": [],
+      "spans": [
+        {
+          "id": "round-1",
+          "end": 2582,
+          "kind": "agent",
+          "label": "round 1",
+          "start": 0,
+          "detail": "0 calls",
+          "status": "ok"
+        },
+        {
+          "id": "round-1-model",
+          "end": 2582,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 0,
+          "detail": "0 tool calls",
+          "status": "ok",
+          "tokens": 3307,
+          "parentId": "round-1"
+        }
+      ],
+      "duration_ms": 2582,
+      "retries": 0,
+      "error": null
+    },
+    {
+      "turn_index": 3,
+      "started_at": "2026-09-15T06:10:46",
+      "ended_at": "2026-09-15T06:10:46",
+      "user": "Cho mình xem lại toàn bộ nội dung ticket trước khi tạo nhé.",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"review_ticket\",\n  \"action\": \"clarify\",\n  \"reply\": \"Dưới đây là nội dung ticket dự kiến:\\n- Tóm tắt: Sự cố VPN trên LT-204\\n- Mức ưu tiên: high\\n- ID tài sản: LT-204\\n\\nBạn có xác nhận tạo ticket với các thông tin này không?\",\n  \"evidence_ids\": []\n}",
+      "reply": "Dưới đây là nội dung ticket dự kiến:\n- Tóm tắt: Sự cố VPN trên LT-204\n- Mức ưu tiên: high\n- ID tài sản: LT-204\n\nBạn có xác nhận tạo ticket với các thông tin này không?",
+      "rounds": [
+        {
+          "round": 1,
+          "tool_calls": [],
+          "tool_results": [],
+          "assistant_text": "{\n  \"intent\": \"review_ticket\",\n  \"action\": \"clarify\",\n  \"reply\": \"Dưới đây là nội dung ticket dự kiến:\\n- Tóm tắt: Sự cố VPN trên LT-204\\n- Mức ưu tiên: high\\n- ID tài sản: LT-204\\n\\nBạn có xác nhận tạo ticket với các thông tin này không?\",\n  \"evidence_ids\": []\n}"
+        }
+      ],
+      "tool_events": [],
+      "spans": [
+        {
+          "id": "round-1",
+          "end": 2281,
+          "kind": "agent",
+          "label": "round 1",
+          "start": 0,
+          "detail": "0 calls",
+          "status": "ok"
+        },
+        {
+          "id": "round-1-model",
+          "end": 2281,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 0,
+          "detail": "0 tool calls",
+          "status": "ok",
+          "tokens": 3381,
+          "parentId": "round-1"
+        }
+      ],
+      "duration_ms": 2281,
+      "retries": 0,
+      "error": null
+    }
+  ]
+}

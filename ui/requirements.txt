@@ -1,0 +1,13 @@
+# Python dependencies for the serverless functions in api/.
+#
+# Vercel installs from a requirements.txt at the project root, which is ui/.
+# The lab's own starter_v0/requirements.txt is not read: it arrives inside
+# .lab/ as data, well after dependency installation has finished.
+#
+# Kept to what the functions actually import, so the bundle stays small:
+#   google-genai  - the Gemini provider
+#   PyYAML        - tools/__init__.py reads artifacts/tools.yaml
+#   requests      - search_device_info's external lookup
+google-genai>=0.8.0
+PyYAML>=6.0
+requests>=2.31.0
