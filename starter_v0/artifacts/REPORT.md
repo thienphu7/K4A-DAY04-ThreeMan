@@ -517,18 +517,29 @@ có thể đối chiếu đóng góp.
 
 ### Hà Trung Dũng — 2A202602948 (TV2, dung1774)
 
-> Chờ Hà Trung Dũng tự viết và commit mục này. Chỉ thay nội dung trong mục
-> của mình; giữ nguyên các mục của thành viên khác. Trả lời đủ tám ý dưới đây
-> bằng trải nghiệm thực tế và dẫn contribution có thật.
+1. **Vai trò**
+   Tôi phụ trách phần System Prompt, tập trung phân tích các lỗi hành vi của agent và đề xuất/chỉnh sửa `starter_v0/artifacts/system_prompt.md`.
 
-- **Vai trò/phần việc được nhận:**
-- **Những gì tôi đã thay đổi trong repo chung:**
-- **File hoặc artifact liên quan:**
-- **Commit hash hoặc pull request:**
-- **Một quyết định kỹ thuật tôi đã đưa ra và lý do:**
-- **Khó khăn tôi gặp và cách tôi xử lý:**
-- **Điều tôi học được từ phần việc này:**
-- **Nếu làm lại, tôi sẽ cải thiện điều gì:**
+2. **Thay đổi tôi đã làm**
+   Tôi chạy baseline và đọc trace của các case fail để xác định lỗi nào thực sự thuộc system prompt. Tôi tập trung vào các vấn đề như xử lý giá trị mơ hồ, confirmation boundary, confirmation bị mất hiệu lực khi payload thay đổi và cancellation.
+
+3. **File liên quan**
+   File chính tôi làm việc là `starter_v0/artifacts/system_prompt.md`. Tôi cũng đọc các run JSON trong `starter_v0/runs/` để đối chiếu expected tool call với actual tool call trước khi quyết định sửa prompt.
+
+4. **Commit / lịch sử thay đổi**
+   Tôi từng commit thay đổi System Prompt ở commit `78e2927`. Sau đó tôi nhận ra nhóm có nhiều người cùng chỉnh sửa file này và việc push trực tiếp lên `main` có thể gây conflict / chồng thay đổi, nên tôi tạo commit revert `f259d01` để đảo thay đổi đó trên `main`. Hai commit này được giữ lại như bằng chứng lịch sử làm việc, không phải để khôi phục prompt cũ.
+
+5. **Quyết định kỹ thuật và lý do**
+   Tôi không sửa prompt chỉ dựa trên nhãn lỗi của evaluator mà đọc trace cụ thể. Ví dụ H19 cho thấy agent tự map môi trường “demo” sang “staging”, nên đây là lỗi ambiguity phù hợp để xử lý bằng system prompt. Ngược lại H10/H11 đã chọn đúng `clarify` nhưng thiếu `response_type`, và H13 chọn đúng tool nhưng thiếu argument `check`, nên tôi xác định các lỗi này phù hợp hơn với phần tool declaration của TV3 thay vì cố sửa tất cả bằng prompt.
+
+6. **Khó khăn và cách xử lý**
+   Khó khăn lớn nhất là kết quả model có thể thay đổi giữa các lần chạy, nên một case có thể PASS ở run này nhưng FAIL ở run khác. Ngoài ra, hai thành viên cùng sửa `system_prompt.md` làm phát sinh Git merge conflict. Tôi đã học cách đọc trace, kiểm tra regression, resolve conflict, dùng `git pull --rebase`, và revert commit khi cần để tránh ghi đè công việc của thành viên khác.
+
+7. **Bài học rút ra**
+   Tôi hiểu rõ hơn rằng cải thiện agent không phải chỉ thêm nhiều rule vào prompt. Mỗi thay đổi cần bắt đầu từ failure cụ thể, có hypothesis, chạy lại cùng eval suite và kiểm tra các case trước đó đã PASS có bị regression hay không. Tôi cũng nhận ra cần phân biệt lỗi system prompt với lỗi tool schema/arguments trước khi chọn nơi sửa.
+
+8. **Điều muốn cải thiện**
+   Nếu làm lại,tôi sẽ lưu hypothesis, before/after trace và metric ngay sau từng vòng thử nghiệm để evidence rõ ràng hơn và giảm thời gian tổng hợp ở cuối lab.
 
 ### Nguyễn Đức Anh — 2A202602508 (TV3, lovelypoet)
 
