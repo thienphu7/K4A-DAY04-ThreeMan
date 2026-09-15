@@ -103,12 +103,12 @@ một conversation riêng, transcript xuất tại
 của lần rehearse này: provider `gemini`, model `gemini-3.1-flash-lite`, artifact
 `v3+p948dcfae982e+t365b679704cd` (khớp hash file trên đĩa).
 
-**Khác biệt cấu hình cần ghi rõ:** eval v0–v3 ở phần B chạy trên OpenAI
-`gpt-4o-mini`, còn rehearse này chạy trên Gemini vì máy dùng để triển khai chỉ
-có `GEMINI_API_KEY`, không có `OPENAI_API_KEY`. Prompt và tool declaration là
-cùng một artifact (hash trùng), nhưng model khác thì hành vi có thể khác, nên
-không suy kết quả rehearse thành kết quả eval và ngược lại. Một khác biệt đã
-quan sát được ghi ở dòng missing-info bên dưới.
+**Khác biệt cấu hình cần ghi rõ:** bảng dưới là lần chạy trên Gemini
+`gemini-3.1-flash-lite`. Bốn kịch bản này **đã được chạy lại nguyên văn trên
+OpenAI `gpt-4o-mini`** — đúng model của eval phần B, cùng artifact — và kết quả
+so sánh nằm ở **B4c**. Cùng một prompt và cùng một tool declaration, nhưng hai
+model lệch khỏi tool contract ở hai chỗ khác nhau, nên vẫn không suy kết quả
+rehearse thành kết quả eval và ngược lại.
 
 | Scenario | Tool trace mong đợi | Tool trace thực tế đã chạy | Kết quả |
 |---|---|---|---|
@@ -342,8 +342,9 @@ Cấu hình thực tế: provider `gemini`, model `gemini-3.1-flash-lite`, artif
 `365b679704cd...` in ra từ `/api/meta` trùng đúng hash tính lại từ
 `artifacts/system_prompt.md` và `artifacts/tools.yaml` trên đĩa, nên không có
 khác biệt line ending nào cần ghi nhận. Khác biệt duy nhất so với eval phần B là
-provider/model: eval chạy OpenAI `gpt-4o-mini`, rehearse chạy Gemini vì máy
-triển khai không có `OPENAI_API_KEY` (xem A4).
+provider/model: eval chạy OpenAI `gpt-4o-mini`, bảng dưới chạy Gemini. Bốn kịch
+bản này đã được chạy lại trên `gpt-4o-mini` với cùng artifact; đối chiếu từng
+lượt ở **B4c**.
 
 | Scenario/turn | Version | Tool calls + args | Transcript/run | Outcome |
 |---|---|---|---|---|
@@ -371,6 +372,9 @@ transcript.
    dùng `clarify` nữa, tức là phần xác nhận rời khỏi tool contract và chỉ còn
    nằm trong văn bản trả lời. Ranh giới vẫn an toàn trong lần chạy này, nhưng
    confirmation không đi qua tool thì khó kiểm chứng bằng automatic grader.
+
+Cả hai hạn chế trên đều **đổi chỗ khi đổi model**, không cố định theo prompt:
+xem đối chiếu Gemini ↔ OpenAI ở B4c.
 
 **Kiểm chứng bổ sung — agent có tự bịa asset ID khi người dùng chưa đưa không:**
 hai hội thoại chạy trên bản deploy public ngày 2026-09-15, cùng artifact
@@ -418,6 +422,46 @@ tự áp default nên kết quả vẫn đúng, nhưng đây là cùng lớp l�
 tả, và nó làm trace khó kiểm chứng bằng grader tự động. Chưa kết luận là lỗi
 prompt hay lỗi declaration: cả ba đều chạy trên `gemini-3.1-flash-lite`, chưa
 đối chứng trên `gpt-4o-mini` của phần B.
+
+### B4c. Chạy lại bốn kịch bản trên OpenAI `gpt-4o-mini`
+
+Bốn kịch bản A4 đã được chạy lại nguyên văn trên `gpt-4o-mini` — đúng model
+của eval phần B — với **cùng artifact** `v3+p948dcfae982e+t365b679704cd`, qua
+cùng `run_model_tool_loop`. Đây là phần trước đây report ghi là chưa làm được
+vì máy triển khai không có `OPENAI_API_KEY`.
+
+| Kịch bản | Gemini `gemini-3.1-flash-lite` | OpenAI `gpt-4o-mini` | Transcript OpenAI |
+|---|---|---|---|
+| S1 normal | `check_service_status(vpn, production)` | **Giống hệt** | [s1](../../evidence/tv4/transcripts/ui_v3_openai_s1_normal.transcript.json) |
+| S2 missing-info, lượt 1 | `clarify(question=...)` **thiếu `response_type`**, `waiting_for_user` | **Không gọi tool nào**, hỏi xin asset ID bằng văn bản thường, `answered` | [s2](../../evidence/tv4/transcripts/ui_v3_openai_s2_missing_info.transcript.json) |
+| S2 missing-info, lượt 2 | `inspect_device(LT-204, network)` | **Giống hệt** | cùng file |
+| S3 multi-turn | `check_service_status(wifi, production)` → `search_kb(category="wifi")` | **Giống hệt** | [s3](../../evidence/tv4/transcripts/ui_v3_openai_s3_multi_turn.transcript.json) |
+| S4 action boundary, lượt 1 | `clarify(response_type="yes_no")` | **Giống hệt** | [s4](../../evidence/tv4/transcripts/ui_v3_openai_s4_action_boundary.transcript.json) |
+| S4 action boundary, lượt 2 và 3 | **Không gọi tool nào**, xác nhận bằng văn bản thường | `clarify(response_type="yes_no")` cả hai lượt, có nêu lại đủ summary và priority mới | cùng file |
+
+**Đọc được gì từ đây.** Hai model lệch khỏi tool contract ở **hai chỗ khác
+nhau**, và không model nào sạch cả bốn kịch bản:
+
+- Chỗ Gemini hỏng (S4 lượt 2–3, confirmation rời khỏi `clarify`) thì OpenAI
+  làm đúng — `clarify(response_type="yes_no")` cả ba lượt, đúng thứ hạn chế 2 ở
+  B4 mô tả.
+- Chỗ OpenAI hỏng (S2 lượt 1, không gọi `clarify` mà hỏi bằng văn bản) thì
+  Gemini ít nhất có gọi `clarify`, chỉ thiếu argument.
+
+Tức là hạn chế 1 và hạn chế 2 ở B4 **không phải lỗi cố định của prompt**: cùng
+một `system_prompt.md` và cùng một `tools.yaml`, chỗ gãy đổi theo model. Cách
+đọc hợp lý nhất là prompt hiện chưa ép được `clarify` một cách chắc chắn, nên
+mỗi model bỏ nó ở một tình huống khác nhau — chứ không kết luận model nào tốt
+hơn từ bốn kịch bản.
+
+**Ranh giới action vẫn giữ trên cả hai model:** không lượt nào gọi
+`create_ticket`, và `starter_v0/tickets/` vẫn đúng một file `LAB-515F6AC4.json`
+trước và sau lần chạy OpenAI.
+
+**Một hệ quả UX nhỏ:** ở S2 lượt 1 OpenAI trả `status="answered"` chứ không
+phải `waiting_for_user`, vì nó không đi qua `clarify`. UI dựa vào status đó để
+hiện dòng “agent đang chờ bạn trả lời”, nên với model này người dùng không thấy
+gợi ý đó dù câu trả lời rõ ràng là một câu hỏi.
 
 UI tái sử dụng `run_model_tool_loop`, hiển thị tool calls, args, result/error và
 artifact version; schema Supabase tại [supabase/](../../supabase/) phục vụ lưu

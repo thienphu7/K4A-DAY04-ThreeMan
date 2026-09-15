@@ -1,0 +1,148 @@
+{
+  "transcript_id": "v3_openai_20260915T075333",
+  "source": "ui",
+  "version": "v3",
+  "artifact_version": "v3+p948dcfae982e+t365b679704cd",
+  "prompt_hash": "948dcfae982ec84b1fa294d42d1fd714eff496beabad676264616e211f45e3df",
+  "tools_hash": "365b679704cd72563d53980f455616921aa026c28386b81619c72dc8164653cd",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "created_at": "2026-09-15T07:53:33",
+  "updated_at": "2026-09-15T07:53:33",
+  "conversation_id": "ce670606-1a8b-448c-b255-75f534662918",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T07:53:33",
+      "ended_at": "2026-09-15T07:53:33",
+      "user": "Dịch vụ VPN production hiện có đang gặp sự cố không?",
+      "status": "answered",
+      "assistant_text": "Dịch vụ VPN trong môi trường production hiện đang gặp sự cố với tình trạng \"degraded\". Cụ thể, có những lỗi xác thực không liên tục xảy ra đối với một số máy khách Windows. \n\n- **Sự cố bắt đầu:** 14 tháng 9, 2026, lúc 07:35\n- **Cập nhật lần cuối:** 14 tháng 9, 2026, lúc 08:50\n- **Vị trí bị ảnh hưởng:** Bangkok và Remote\n- **Giải pháp tạm thời:** Thử lại sau khi đồng bộ hóa đồng hồ của thiết bị.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ, hãy cho tôi biết!",
+      "reply": "Dịch vụ VPN trong môi trường production hiện đang gặp sự cố với tình trạng \"degraded\". Cụ thể, có những lỗi xác thực không liên tục xảy ra đối với một số máy khách Windows. \n\n- **Sự cố bắt đầu:** 14 tháng 9, 2026, lúc 07:35\n- **Cập nhật lần cuối:** 14 tháng 9, 2026, lúc 08:50\n- **Vị trí bị ảnh hưởng:** Bangkok và Remote\n- **Giải pháp tạm thời:** Thử lại sau khi đồng bộ hóa đồng hồ của thiết bị.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ, hãy cho tôi biết!",
+      "rounds": [
+        {
+          "round": 1,
+          "tool_calls": [
+            {
+              "args": {
+                "service": "vpn",
+                "environment": "production"
+              },
+              "name": "check_service_status"
+            }
+          ],
+          "tool_results": [
+            {
+              "args": {
+                "service": "vpn",
+                "environment": "production"
+              },
+              "tool": "check_service_status",
+              "result": {
+                "tool": "check_service_status",
+                "status": "degraded",
+                "service": "vpn",
+                "incident": "Intermittent authentication failures for some Windows clients",
+                "checked_at": "2026-09-14T09:00:00+07:00",
+                "started_at": "2026-09-14T07:35:00+07:00",
+                "workaround": "Retry once after synchronizing the device clock",
+                "environment": "production",
+                "incident_id": "INC-1042",
+                "last_updated": "2026-09-14T08:50:00+07:00",
+                "affected_locations": [
+                  "Bangkok",
+                  "Remote"
+                ]
+              }
+            }
+          ],
+          "assistant_text": null
+        },
+        {
+          "round": 2,
+          "tool_calls": [],
+          "tool_results": [],
+          "assistant_text": "Dịch vụ VPN trong môi trường production hiện đang gặp sự cố với tình trạng \"degraded\". Cụ thể, có những lỗi xác thực không liên tục xảy ra đối với một số máy khách Windows. \n\n- **Sự cố bắt đầu:** 14 tháng 9, 2026, lúc 07:35\n- **Cập nhật lần cuối:** 14 tháng 9, 2026, lúc 08:50\n- **Vị trí bị ảnh hưởng:** Bangkok và Remote\n- **Giải pháp tạm thời:** Thử lại sau khi đồng bộ hóa đồng hồ của thiết bị.\n\nNếu bạn cần thêm thông tin hoặc hỗ trợ, hãy cho tôi biết!"
+        }
+      ],
+      "tool_events": [
+        {
+          "args": {
+            "service": "vpn",
+            "environment": "production"
+          },
+          "tool": "check_service_status",
+          "result": {
+            "tool": "check_service_status",
+            "status": "degraded",
+            "service": "vpn",
+            "incident": "Intermittent authentication failures for some Windows clients",
+            "checked_at": "2026-09-14T09:00:00+07:00",
+            "started_at": "2026-09-14T07:35:00+07:00",
+            "workaround": "Retry once after synchronizing the device clock",
+            "environment": "production",
+            "incident_id": "INC-1042",
+            "last_updated": "2026-09-14T08:50:00+07:00",
+            "affected_locations": [
+              "Bangkok",
+              "Remote"
+            ]
+          }
+        }
+      ],
+      "spans": [
+        {
+          "id": "round-1",
+          "end": 3695,
+          "kind": "agent",
+          "label": "round 1",
+          "start": 0,
+          "detail": "1 call",
+          "status": "ok"
+        },
+        {
+          "id": "round-1-model",
+          "end": 3694,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 0,
+          "detail": "1 tool call",
+          "status": "ok",
+          "parentId": "round-1"
+        },
+        {
+          "id": "round-1-tool-0",
+          "end": 3696,
+          "kind": "tool",
+          "label": "check_service_status",
+          "start": 3695,
+          "detail": "status=degraded",
+          "status": "ok",
+          "parentId": "round-1"
+        },
+        {
+          "id": "round-2",
+          "end": 5483,
+          "kind": "agent",
+          "label": "round 2",
+          "start": 3695,
+          "detail": "0 calls",
+          "status": "ok"
+        },
+        {
+          "id": "round-2-model",
+          "end": 5483,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 3695,
+          "detail": "0 tool calls",
+          "status": "ok",
+          "parentId": "round-2"
+        }
+      ],
+      "duration_ms": 5483,
+      "retries": 0,
+      "error": null
+    }
+  ]
+}
