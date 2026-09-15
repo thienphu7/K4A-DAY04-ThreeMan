@@ -4,6 +4,7 @@ import * as React from "react"
 import { Activity, Check, Copy, RefreshCw, TriangleAlert, User } from "lucide-react"
 import { AgentTrace } from "@/components/ui/agent-trace"
 import { JsonViewer } from "@/components/json-viewer"
+import { ReplyText } from "@/components/reply-text"
 import { ToolEventList } from "@/components/tool-event-list"
 import { STATUS_LABEL, type ChatResponse, type RunStatus } from "@/lib/api"
 import { cn } from "@/lib/utils"
@@ -161,11 +162,7 @@ function AgentAnswer({
         />
       )}
 
-      {response.reply && (
-        <p className="text-foreground text-sm leading-relaxed whitespace-pre-wrap">
-          {response.reply}
-        </p>
-      )}
+      {response.reply && <ReplyText text={response.reply} />}
 
       {response.status === "waiting_for_user" && (
         <p className="border-border text-muted-foreground rounded-lg border border-dashed px-3 py-2 text-xs">

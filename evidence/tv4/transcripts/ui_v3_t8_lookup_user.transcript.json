@@ -1,0 +1,145 @@
+{
+  "transcript_id": "v3_gemini_20260915T070246",
+  "source": "ui",
+  "version": "v3",
+  "artifact_version": "v3+p948dcfae982e+t365b679704cd",
+  "prompt_hash": "948dcfae982ec84b1fa294d42d1fd714eff496beabad676264616e211f45e3df",
+  "tools_hash": "365b679704cd72563d53980f455616921aa026c28386b81619c72dc8164653cd",
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite",
+  "created_at": "2026-09-15T07:02:46",
+  "updated_at": "2026-09-15T07:02:47",
+  "conversation_id": "929473fd-a183-43cf-8a85-8fbbaba9438d",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-09-15T07:02:47",
+      "ended_at": "2026-09-15T07:02:47",
+      "user": "Tài khoản của nhân viên EMP-1003 đang có vấn đề gì vậy?",
+      "status": "answered",
+      "assistant_text": "{\n  \"intent\": \"account_status_check\",\n  \"action\": \"none\",\n  \"reply\": \"Tài khoản của nhân viên Chi Le (EMP-1003) hiện đang ở trạng thái 'locked' (bị khóa). Bạn có muốn tôi kiểm tra chính sách liên quan đến việc mở khóa tài khoản hoặc hỗ trợ tạo yêu cầu hỗ trợ không?\",\n  \"evidence_ids\": [\n    \"EMP-1003\"\n  ]\n}",
+      "reply": "Tài khoản của nhân viên Chi Le (EMP-1003) hiện đang ở trạng thái 'locked' (bị khóa). Bạn có muốn tôi kiểm tra chính sách liên quan đến việc mở khóa tài khoản hoặc hỗ trợ tạo yêu cầu hỗ trợ không?",
+      "rounds": [
+        {
+          "round": 1,
+          "tool_calls": [
+            {
+              "args": {
+                "employee_id": "EMP-1003"
+              },
+              "name": "lookup_user"
+            }
+          ],
+          "tool_results": [
+            {
+              "args": {
+                "employee_id": "EMP-1003"
+              },
+              "tool": "lookup_user",
+              "result": {
+                "tool": "lookup_user",
+                "employee": {
+                  "office": "Bangkok",
+                  "department": "Operations",
+                  "mfa_status": "enrolled",
+                  "employee_id": "EMP-1003",
+                  "display_name": "Chi Le",
+                  "account_status": "locked",
+                  "assigned_assets": [
+                    "DT-031"
+                  ]
+                },
+                "snapshot_at": "2026-09-14T09:00:00+07:00"
+              }
+            }
+          ],
+          "assistant_text": null
+        },
+        {
+          "round": 2,
+          "tool_calls": [],
+          "tool_results": [],
+          "assistant_text": "{\n  \"intent\": \"account_status_check\",\n  \"action\": \"none\",\n  \"reply\": \"Tài khoản của nhân viên Chi Le (EMP-1003) hiện đang ở trạng thái 'locked' (bị khóa). Bạn có muốn tôi kiểm tra chính sách liên quan đến việc mở khóa tài khoản hoặc hỗ trợ tạo yêu cầu hỗ trợ không?\",\n  \"evidence_ids\": [\n    \"EMP-1003\"\n  ]\n}"
+        }
+      ],
+      "tool_events": [
+        {
+          "args": {
+            "employee_id": "EMP-1003"
+          },
+          "tool": "lookup_user",
+          "result": {
+            "tool": "lookup_user",
+            "employee": {
+              "office": "Bangkok",
+              "department": "Operations",
+              "mfa_status": "enrolled",
+              "employee_id": "EMP-1003",
+              "display_name": "Chi Le",
+              "account_status": "locked",
+              "assigned_assets": [
+                "DT-031"
+              ]
+            },
+            "snapshot_at": "2026-09-14T09:00:00+07:00"
+          }
+        }
+      ],
+      "spans": [
+        {
+          "id": "round-1",
+          "end": 998,
+          "kind": "agent",
+          "label": "round 1",
+          "start": 0,
+          "detail": "1 call",
+          "status": "ok"
+        },
+        {
+          "id": "round-1-model",
+          "end": 998,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 0,
+          "detail": "1 tool call",
+          "status": "ok",
+          "tokens": 3176,
+          "parentId": "round-1"
+        },
+        {
+          "id": "round-1-tool-0",
+          "end": 999,
+          "kind": "tool",
+          "label": "lookup_user",
+          "start": 998,
+          "detail": "2 fields",
+          "status": "ok",
+          "parentId": "round-1"
+        },
+        {
+          "id": "round-2",
+          "end": 2529,
+          "kind": "agent",
+          "label": "round 2",
+          "start": 998,
+          "detail": "0 calls",
+          "status": "ok"
+        },
+        {
+          "id": "round-2-model",
+          "end": 2529,
+          "kind": "model",
+          "label": "model.complete",
+          "start": 998,
+          "detail": "0 tool calls",
+          "status": "ok",
+          "tokens": 3558,
+          "parentId": "round-2"
+        }
+      ],
+      "duration_ms": 2529,
+      "retries": 0,
+      "error": null
+    }
+  ]
+}
