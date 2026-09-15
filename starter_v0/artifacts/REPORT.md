@@ -41,15 +41,28 @@ Mở http://localhost:3000. Header phải hiện `v3+p948dcfae982e+t365b679704cd
 nếu khác thì artifact trên đĩa không phải bản v3 được chọn. Đây là cách đã dùng
 để chạy bốn kịch bản A4 và xuất transcript ở B4.
 
-*Cách 2 — URL public, hiện chưa dùng được làm demo v3.* Bản deploy
-https://vinuni-it.vercel.app có tồn tại và trả HTTP 200, nhưng kiểm tra
-`/api/meta` ngày 2026-09-15 cho thấy nó đang phục vụ artifact
-`v0+p27467914bc4d+teb3e2243f237`: cả prompt hash lẫn tools hash đều không khớp
-v3, và tools hash `eb3e2243f237` là bản trước tool contract v2 của TV3. Bản
-deploy này có từ PR #2 và chưa được cập nhật. **Không dẫn URL này như demo v3
-cho đến khi deploy lại từ commit merge của PR tích hợp UI/database và `/api/meta`
-trả đúng `v3+p948dcfae982e+t365b679704cd`.** Việc deploy lại cần quyền Vercel và
-biến môi trường của project, không thực hiện trong PR này.
+*Cách 2 — URL public, không cần cài gì.* https://vinuni-it.vercel.app đã được
+deploy lại sau khi merge PR #16 và hiện phục vụ đúng artifact v3. Người chấm tự
+kiểm chứng được bằng một lệnh:
+
+```bash
+curl -s https://vinuni-it.vercel.app/api/meta
+```
+
+Kết quả ngày 2026-09-15 trả `"artifact_version": "v3+p948dcfae982e+t365b679704cd"`,
+khớp dòng v3 được chọn ở cuối `version_log.csv`. Một lượt hỏi thật trên bản
+deploy này ("Dịch vụ VPN production hiện có đang gặp sự cố không?") chạy hai
+round, gọi `check_service_status`, trả lời đúng sự cố INC-1042 trong 2,5 giây;
+lịch sử hội thoại đọc và ghi được trên Supabase. Trước đó URL phục vụ artifact
+`v0+p27467914bc4d+teb3e2243f237` từ PR #2 — bản trước tool contract v2 của TV3 —
+nên mọi ảnh chụp URL này trước 2026-09-15 không dùng làm bằng chứng v3 được.
+
+Một lưu ý về hash: `artifact_version` băm byte thô của file, nên ký tự xuống
+dòng cũng tính. Chuỗi `v3+p948dcfae982e+t365b679704cd` trong report là bản
+CRLF, tức bản checkout trên Windows — giống máy TV1 khi chạy eval phần B, và
+bản deploy nói trên cũng upload trực tiếp từ checkout Windows. Nếu deploy lại
+từ Git trên máy Linux (checkout LF) thì hai hash sẽ khác dù nội dung
+`system_prompt.md` và `tools.yaml` không đổi một ký tự nào.
 
 ## A2. Tool agent có
 
