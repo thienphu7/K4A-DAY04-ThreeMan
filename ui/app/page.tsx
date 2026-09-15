@@ -32,10 +32,10 @@ import {
 
 /** Starting points that exercise the flows the lab wants evidence for. */
 const EXAMPLES = [
-  { text: "VPN production co dang bi loi khong?", note: "Shared service status" },
-  { text: "Laptop LT-318 khong vao duoc VPN, kiem tra giup minh.", note: "One device, by asset ID" },
-  { text: "Kiem tra thiet bi giup minh.", note: "Missing identifier, the agent should ask" },
-  { text: "Mo ticket cho su co VPN cua LT-318.", note: "Write action, needs confirmation" },
+  { text: "VPN production có đang bị lỗi không?", note: "Shared service status" },
+  { text: "Laptop LT-318 không vào được VPN, kiểm tra giúp mình.", note: "One device, by asset ID" },
+  { text: "Kiểm tra thiết bị giúp mình.", note: "Missing identifier, the agent should ask" },
+  { text: "Mở ticket cho sự cố VPN của LT-318.", note: "Write action, needs confirmation" },
 ]
 
 const TRACE_PREFERENCE_KEY = "helpdesk-agent:show-trace"
